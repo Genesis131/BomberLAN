@@ -18,22 +18,21 @@ import org.jsfml.window.event.KeyEvent;;
  */
 public class GameBoard {
     
-    public static Drawable player(int x, int y,Color color){//0 à 12 
-            
-            CircleShape Circle = new CircleShape();
-            Circle.setRadius(16);//Radius = rayon
-            Circle.setOrigin(-32*x,-32*y);
-            Circle.setFillColor(color);
-            return Circle;
+    public static Drawable player(int x, int y,Color color){//0 à 12             
+        CircleShape Circle = new CircleShape();
+        Circle.setRadius(16);//Radius = rayon
+        Circle.setOrigin(-32*x,-32*y);
+        Circle.setFillColor(color);
+        return Circle;
     }
     
     public static Drawable drawLine(int x, int y, boolean vertical){
-            RectangleShape Line = new RectangleShape();
-            Line.setOrigin(-32*x,-32*y);
-            Vector2f size = new Vector2f(0,0);
-            Line.setOutlineThickness(1);
-            Line.setOutlineColor(Color.WHITE);
-            Line.setFillColor(Color.WHITE);
+        RectangleShape Line = new RectangleShape();
+        Line.setOrigin(-32*x,-32*y);
+        Vector2f size = new Vector2f(0,0);
+        Line.setOutlineThickness(1);
+        Line.setOutlineColor(Color.WHITE);
+        Line.setFillColor(Color.WHITE);
         if (vertical){
                 size = new Vector2f(0,416);
             }
@@ -45,29 +44,29 @@ public class GameBoard {
     }
     
     public static Drawable unbreakable(int x, int y){
-            RectangleShape Block = new RectangleShape();
-            Block.setOrigin(-32*x,-32*y);
-            Vector2f size = new Vector2f(32,32);
-            Block.setFillColor(Color.WHITE);
-            Block.setSize(size);
+        RectangleShape Block = new RectangleShape();
+        Block.setOrigin(-32*x,-32*y);
+        Vector2f size = new Vector2f(32,32);
+        Block.setFillColor(Color.WHITE);
+        Block.setSize(size);
         return Block;
     }
     
     public static Drawable breakable(int x, int y){
-            RectangleShape Block = new RectangleShape();
-            Block.setOrigin(-32*x,-32*y);
-            Vector2f size = new Vector2f(32,32);
-            Block.setFillColor(Color.MAGENTA);
-            Block.setSize(size);
+        RectangleShape Block = new RectangleShape();
+        Block.setOrigin(-32*x,-32*y);
+        Vector2f size = new Vector2f(32,32);
+        Block.setFillColor(Color.MAGENTA);
+        Block.setSize(size);
         return Block;
     }
     
     public static Drawable empty(int x, int y){
-            RectangleShape Block = new RectangleShape();
-            Block.setOrigin(-32*x,-32*y);
-            Vector2f size = new Vector2f(32,32);
-            Block.setFillColor(Color.BLACK);
-            Block.setSize(size);
+        RectangleShape Block = new RectangleShape();
+        Block.setOrigin(-32*x,-32*y);
+        Vector2f size = new Vector2f(32,32);
+        Block.setFillColor(Color.BLACK);
+        Block.setSize(size);
         return Block;
     }
     
@@ -77,7 +76,7 @@ public class GameBoard {
         RenderWindow window = new RenderWindow();
         
         //WindowStyle style = new WindowStyle();
-        window.create(new VideoMode(416,416), "BomberLAN", window.DEFAULT); // 442*442
+        window.create(new VideoMode(416,416), "BomberLAN", WindowStyle.DEFAULT); // 442*442
 
         //Limit the framerate
         window.setFramerateLimit(60);
@@ -133,61 +132,61 @@ public class GameBoard {
                     window.draw(player(cx,cy,Color.CYAN));
                     window.draw(player(yx,yy,Color.YELLOW));
                     window.display();
-                }
-            }  
-        }	
-        
-    
-
-    }
+                } // if (event.type == Event.Type.KEY_PRESSED)
+            }  // for(Event event : window.pollEvents()) 
+        }	// while(window.isOpen())
+    } // main
     static String coordFromAction(String action, int x, int y){
         String newCoord=""+x+","+y;
-        try{
-            if(action.equals("D")){
-                if (x+1<=12){
-                	x+=1;
-                } else {
-                	x=12;
-                }
-                String sx = String.valueOf(x +100).substring(1);
-                String sy = String.valueOf(y +100).substring(1);
-                newCoord = ""+sx+","+sy;
+        if(action.equals("D")){
+            if (x+1<=12){
+            	x+=1;
+            } else {
+            	x=12;
             }
-            else if(action.equals("Q")){
-            	if (x-1>=0){
-                	x-=1;
-                } else {
-                	x=0;
-                }    
-                String sx = String.valueOf(x +100).substring(1);
-                String sy = String.valueOf(y +100).substring(1);
-                newCoord = ""+sx+","+sy;
-            }
-            else if(action.equals("S")){
-            	if (y+1<=12){
-            		y+=1;
-                } else {
-                	y=12;
-                }    
-            	
-                String sx = String.valueOf(x +100).substring(1);
-                String sy = String.valueOf(y +100).substring(1);
-                newCoord = ""+sx+","+sy;
-            }
-            else if(action.equals("Z")){
-            	if (y-1>=0){
-                	y-=1;
-                } else {
-                	y=0;
-                } 
-                String sx = String.valueOf(x +100).substring(1);
-                String sy = String.valueOf(y +100).substring(1);
-                newCoord = ""+sx+","+sy;
-            }
-        }catch(Exception e){
-            System.out.println("Out of range");
-        }
+            String sx = String.valueOf(x +100).substring(1);
+            String sy = String.valueOf(y +100).substring(1);
+            newCoord = ""+sx+","+sy;
+        } // if(action.equals("D"))
         
+        else if(action.equals("Q")){
+        	if (x-1>=0){
+            	x-=1;
+            } else {
+            	x=0;
+            }    
+            String sx = String.valueOf(x +100).substring(1);
+            String sy = String.valueOf(y +100).substring(1);
+            newCoord = ""+sx+","+sy;
+        } //  if(action.equals("Q"))
+        
+         else if(action.equals("S")){
+        	if (y+1<=12){
+        		y+=1;
+            } else {
+            	y=12;
+            }    
+            String sx = String.valueOf(x +100).substring(1);
+            String sy = String.valueOf(y +100).substring(1);
+            newCoord = ""+sx+","+sy;
+        } //  if(action.equals("S"))
+        
+         else if(action.equals("Z")){
+        	if (y-1>=0){
+            	y-=1;
+            } else {
+            	y=0;
+            } 
+            String sx = String.valueOf(x +100).substring(1);
+            String sy = String.valueOf(y +100).substring(1);
+            newCoord = ""+sx+","+sy;
+        } //  if(action.equals("Z"))
+         else{
+             System.out.println("mauvaise touche " + action);
+             String sx = String.valueOf(x +100).substring(1);
+             String sy = String.valueOf(y +100).substring(1);
+             newCoord = ""+sx+","+sy;
+         } // else
         return newCoord;
     }
 }
