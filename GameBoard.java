@@ -92,6 +92,12 @@ public class GameBoard {
         return Block;
     }
     
+    public static void movePlayer (String action, CircleShape player){
+    	if(action.equals("D")){
+    		player.move(1,0);
+    	}
+    }
+    
     public static int[] coordFromAction(String action, int x, int y){
         int newCoord[]={x,y};
         		//Coords.Coords(x,y);
@@ -159,7 +165,13 @@ public class GameBoard {
             window.draw(drawLine(i,j,orientation)); // Coordonnées bizarres 
             window.draw(drawLine(j,i,!orientation)); // Coordonnées bizarres 
         }
-        window.draw(player( x, y,Color.RED));
+        
+        CircleShape player1 = new CircleShape();
+        player1.setRadius(16);//Radius = rayon
+        player1.setOrigin(-32*x,-32*y);
+        player1.setFillColor(Color.RED);
+        
+        window.draw(player1);
         window.draw(player(gx, gy,Color.GREEN));
         window.draw(player( cx,cy,Color.CYAN));
         window.draw(player(yx,yy,Color.YELLOW));
@@ -176,10 +188,11 @@ public class GameBoard {
         
         while(window.isOpen()) {
             window.clear(Color.BLACK);
-        	for (int i=0 ; i<14 ; ++i){
+            for (int i=0 ; i<14 ; ++i){
                 window.draw(drawLine(i,j,orientation)); // Coordonnées bizarres 
                 window.draw(drawLine(j,i,!orientation)); // Coordonnées bizarres 
             }
+            
             //Handle events
             for(Event event : window.pollEvents()) {
                 if(event.type == Event.Type.CLOSED) {
@@ -197,10 +210,11 @@ public class GameBoard {
                     	savedx = x;
                     	savedy = y;
                     	System.out.println(globalTime.getElapsedTime());
-                    } else {
+                    } else {/*
                     	int[] coord = coordFromAction(touche,x,y);
                     	x = coord[0];
-                        y = coord[1];
+                        y = coord[1];*/
+                    	movePlayer(touche,player1);
                     }
                    
                     System.out.println(touche+" "+x+" "+y);
@@ -209,11 +223,13 @@ public class GameBoard {
                         window.draw(bomb(savedx,savedy,drawBomb));
                         --drawBomb;
                     }
+                    window.draw(player1);
+                    /*
                     window.draw(player( x,y,Color.RED));
                     window.draw(player(gx, gy,Color.GREEN));
                     window.draw(player(cx,cy,Color.CYAN));
                     window.draw(player(yx,yy,Color.YELLOW));
-                    
+                    */
                     window.display();
                 } // if (event.type == Event.Type.KEY_PRESSED)
             } // for(Event event : window.pollEvents()) 
