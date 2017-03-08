@@ -1,3 +1,4 @@
+package mainpkg;
 import org.jsfml.graphics.*;
 import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
@@ -14,6 +15,7 @@ import org.jsfml.window.event.KeyEvent;;
  * Les x et y restent les mêmes que conventionnellement (x abscisses y ordonnées)
  */
 public class GameBoard {
+	
 	
     public static Drawable player(int x, int y,Color color){//0 à 12             
         CircleShape Circle = new CircleShape();
@@ -51,7 +53,8 @@ public class GameBoard {
         }
         return Circle;
     }
-    /* Là, j'en ai eu marre
+    
+    /*
     public int msTime(Time time){
     	String mstr;
     	int ms;
@@ -89,56 +92,42 @@ public class GameBoard {
         return Block;
     }
     
-    public static String coordFromAction(String action, int x, int y){
-        String newCoord=""+x+","+y;
+    public static int[] coordFromAction(String action, int x, int y){
+        int newCoord[]={x,y};
+        		//Coords.Coords(x,y);
         if(action.equals("D")){
             if (x+1<=12){
-            	x+=1;
+            	newCoord[0] = x+1;
             } else {
-            	x=12;
+            	newCoord[0] = 12;
             }
-            String sx = String.valueOf(x +100).substring(1);
-            String sy = String.valueOf(y +100).substring(1);
-            newCoord = ""+sx+","+sy;
         } // if(action.equals("D"))
         
         else if(action.equals("Q")){
         	if (x-1>=0){
-            	x-=1;
+        		newCoord[0] = x-1;
             } else {
-            	x=0;
+            	newCoord[0] = 0;
             }
-            String sx = String.valueOf(x +100).substring(1);
-            String sy = String.valueOf(y +100).substring(1);
-            newCoord = ""+sx+","+sy;
         } //  if(action.equals("Q"))
         
          else if(action.equals("S")){
         	if (y+1<=12){
-        		y+=1;
+                newCoord[1] = y+1;
             } else {
-            	y=12;
+                newCoord[1] = 12;
             }
-            String sx = String.valueOf(x +100).substring(1);
-            String sy = String.valueOf(y +100).substring(1);
-            newCoord = ""+sx+","+sy;
         } //  if(action.equals("S"))
         
          else if(action.equals("Z")){
         	if (y-1>=0){
-            	y-=1;
+                newCoord[1] = y-1;
             } else {
-            	y=0;
+            	newCoord[1] = 0;
             }
-            String sx = String.valueOf(x +100).substring(1);
-            String sy = String.valueOf(y +100).substring(1);
-            newCoord = ""+sx+","+sy;
         } //  if(action.equals("Z"))
          else {
              System.out.println("mauvaise touche " + action);
-             String sx = String.valueOf(x +100).substring(1);
-             String sy = String.valueOf(y +100).substring(1);
-             newCoord = ""+sx+","+sy;
          } // else
         return newCoord;
     }
@@ -178,7 +167,7 @@ public class GameBoard {
         //window.draw(empty(3,5));
         //window.draw(breakable(4,5));
         window.display();
-
+        
         int drawBomb =0;
         int savedx = 0; 
         int savedy = 0;
@@ -203,15 +192,15 @@ public class GameBoard {
                     String touche = "" + keyEvent.key;
                     if (touche.equals("C")){
                     	//bombTime =  ;
-//                    	bombTime += 3;
+                    	//bombTime += 3;
                     	drawBomb = 3;
-                    	savedx = x ; 
+                    	savedx = x;
                     	savedy = y;
                     	System.out.println(globalTime.getElapsedTime());
                     } else {
-                    	String coord = coordFromAction(touche,x,y);
-                    	 x= Integer.parseInt(""+coord.charAt(0)+coord.charAt(1));
-                         y= Integer.parseInt(""+coord.charAt(3)+coord.charAt(4));
+                    	int[] coord = coordFromAction(touche,x,y);
+                    	x = coord[0];
+                        y = coord[1];
                     }
                    
                     System.out.println(touche+" "+x+" "+y);
@@ -225,10 +214,9 @@ public class GameBoard {
                     window.draw(player(cx,cy,Color.CYAN));
                     window.draw(player(yx,yy,Color.YELLOW));
                     
-                   
                     window.display();
                 } // if (event.type == Event.Type.KEY_PRESSED)
-            }  // for(Event event : window.pollEvents()) 
-        }	// while(window.isOpen())
+            } // for(Event event : window.pollEvents()) 
+        } // while(window.isOpen())
     } // main
 }
