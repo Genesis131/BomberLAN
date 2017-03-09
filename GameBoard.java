@@ -1,4 +1,8 @@
 package mainpkg;
+
+
+import java.util.Vector;
+
 import org.jsfml.graphics.*;
 import org.jsfml.system.Clock;
 import org.jsfml.system.Time;
@@ -42,15 +46,15 @@ public class GameBoard {
         return Line;
     }
     
-    public static Drawable bomb(int x, int y, int drawBomb){
+    public static Shape bomb(int x, int y){
     	CircleShape Circle = new CircleShape();
         Circle.setRadius(16);//Radius = rayon
         Circle.setOrigin(-32*x,-32*y);
         Circle.setFillColor(Color.MAGENTA);
-        if (drawBomb%2 == 0){
+        /*if (drawBomb%2 == 0){
         	Circle.setOutlineColor(Color.WHITE);
         	Circle.setOutlineThickness(2);
-        }
+        }*/
         return Circle;
     }
     
@@ -92,11 +96,6 @@ public class GameBoard {
         return Block;
     }
     
-    public static void movePlayer (String action, CircleShape player){
-    	if(action.equals("D")){
-    		player.move(1,0);
-    	}
-    }
     
     public static int[] coordFromAction(String action, int x, int y){
         int newCoord[]={x,y};
@@ -149,31 +148,28 @@ public class GameBoard {
 
         //Limit the framerate
         window.setFramerateLimit(60);
-
+        
+        Vector <Shape> storeBomb = new Vector();
+        Vector <Integer> storeTimer = new Vector();
+        int rx=0;
+        int ry=0;
         int gx = 12;
         int gy = 0;
         int cx = 0;
         int cy = 12;
         int yx = 12;
         int yy = 12;
-        int x=0;
-        int y=0;
-        boolean orientation;
-        orientation=true;
-        int j=0;
+        
+        boolean orientation = true;
+
         for (int i=0 ; i<14 ; ++i){
-            window.draw(drawLine(i,j,orientation)); // Coordonnées bizarres 
-            window.draw(drawLine(j,i,!orientation)); // Coordonnées bizarres 
+            window.draw(drawLine(i,0,orientation)); // Coordonnées bizarres 
+            window.draw(drawLine(0,i,!orientation)); // Coordonnées bizarres 
         }
         
-        CircleShape player1 = new CircleShape();
-        player1.setRadius(16);//Radius = rayon
-        player1.setOrigin(-32*x,-32*y);
-        player1.setFillColor(Color.RED);
-        
-        window.draw(player1);
-        window.draw(player(gx, gy,Color.GREEN));
-        window.draw(player( cx,cy,Color.CYAN));
+        window.draw(player(rx,ry,Color.RED));
+        window.draw(player(gx,gy,Color.GREEN));
+        window.draw(player(cx,cy,Color.CYAN));
         window.draw(player(yx,yy,Color.YELLOW));
         //window.draw(unbreakable(5,5));
         //window.draw(empty(3,5));
@@ -183,14 +179,14 @@ public class GameBoard {
         int drawBomb =0;
         int savedx = 0; 
         int savedy = 0;
-        //Main loop
-        Time bombTime;
+        //Time bombTime;
         
-        while(window.isOpen()) {
+        while(window.isOpen()) {//Main loop
+            
             window.clear(Color.BLACK);
             for (int i=0 ; i<14 ; ++i){
-                window.draw(drawLine(i,j,orientation)); // Coordonnées bizarres 
-                window.draw(drawLine(j,i,!orientation)); // Coordonnées bizarres 
+                window.draw(drawLine(i,0,orientation)); // Coordonnées bizarres 
+                window.draw(drawLine(0,i,!orientation)); // Coordonnées bizarres 
             }
             
             //Handle events
@@ -200,39 +196,43 @@ public class GameBoard {
                     window.close();
                 }
                 if (event.type == Event.Type.KEY_PRESSED){
-                     
+                	
                     KeyEvent keyEvent = event.asKeyEvent();
                     String touche = "" + keyEvent.key;
-                    if (touche.equals("C")){
+                    if (touche.equals("C")){ 
                     	//bombTime =  ;
                     	//bombTime += 3;
                     	drawBomb = 3;
-                    	savedx = x;
-                    	savedy = y;
+                    	savedx = rx;
+                    	savedy = ry;
+                    	storeTimer.add(3*60);
+                    	storeBomb.add(bomb(rx,ry));
+                    	
                     	System.out.println(globalTime.getElapsedTime());
-                    } else {/*
-                    	int[] coord = coordFromAction(touche,x,y);
-                    	x = coord[0];
-                        y = coord[1];*/
-                    	movePlayer(touche,player1);
+                    } else {
+                    	int[] coord = coordFromAction(touche,rx,ry);
+                    	rx = coord[0];
+                        ry = coord[1];
                     }
                    
-                    System.out.println(touche+" "+x+" "+y);
-                    if (drawBomb > 0){
-                    	System.out.println(globalTime.getElapsedTime());
-                        window.draw(bomb(savedx,savedy,drawBomb));
-                        --drawBomb;
-                    }
-                    window.draw(player1);
-                    /*
-                    window.draw(player( x,y,Color.RED));
-                    window.draw(player(gx, gy,Color.GREEN));
-                    window.draw(player(cx,cy,Color.CYAN));
-                    window.draw(player(yx,yy,Color.YELLOW));
-                    */
-                    window.display();
+                    System.out.println(touche+" "+rx+" "+ry);
+                   
+                    
+                     
                 } // if (event.type == Event.Type.KEY_PRESSED)
-            } // for(Event event : window.pollEvents()) 
-        } // while(window.isOpen())
+            }// for(Event event : window.pollEvents()) 
+            
+            for (int i=0 ; i<storeBomb.size() ; ++i) {
+            	if (storeTimer.elementAt(i)>0) {
+            		window.draw(storeBomb.elementAt(i));
+            		storeTimer.elementAt(i).intValue() = storeTimer.elementAt(i).intValue()-1;
+            	}
+            }
+            window.draw(player(rx,ry,Color.RED));
+            window.draw(player(gx,gy,Color.GREEN));
+            window.draw(player(cx,cy,Color.CYAN));
+            window.draw(player(yx,yy,Color.YELLOW));
+            window.display();
+        } // while(window.isOpen()) MAIN LOOP
     } // main
 }
